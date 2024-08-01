@@ -1,14 +1,19 @@
-import { useGetData } from "@/app/hooks/useGetData"
-import { RootItem } from "../RootItem"
+import { useGetData } from '@/app/hooks/useGetData'
+import { MenuItem } from '../MenuItem'
 
 export function Menu(): JSX.Element {
   const { rootItems } = useGetData()
-  
+
   return (
-    <ul role='menu' className="w-full h-full p-4 flex flex-col gap-4 justify-center">
-      {rootItems?.map(({ id, name}) => (
-        <RootItem key={id} id={id} item={name}/>
-      ))}
-    </ul>
+    <aside className='col-span-2 w-full h-full'>
+      <ul
+        role='menu'
+        className='h-full flex flex-col gap-4 justify-center border border-transparent border-r-zinc-200 '
+      >
+        {rootItems?.map(({ id, name }) => (
+          <MenuItem key={id} id={id} item={name} />
+        ))}
+      </ul>
+    </aside>
   )
 }

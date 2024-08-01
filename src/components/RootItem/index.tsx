@@ -1,33 +1,31 @@
-import { useGetData } from "@/app/hooks/useGetData"
-import type { RootItemProps } from "@/types"
-import { NestedItem } from "../NestedItem"
+import { useMenu } from '@/app/hooks/useMenu'
+import { MenuIndicator } from '../MenuIndicator'
+import type { RootItemProps } from '@/types'
 
-export function RootItem({ id, item }: RootItemProps): JSX.Element {
-  const { filterParentsItems, data } = useGetData()
-  const parents = filterParentsItems(id)
-  const hasParents = parents.length > 0
+export function RootItem({
+  id,
+  item,
+  showIndicator,
+  parentId
+}: RootItemProps): JSX.Element {
+  const { dispatchSelectNested, dispatchSelectRoot, selected } = useMenu()
+  const isActive = selected.current === id || selected.parent === parentId
+  function handleSelectMenuItem() {
+    if (parentId) {
+      dispatchSelectRoot(parentId)
+    }
+    if(id) {
+      dispatchSelectNested(id)
+    }
+  }
 
   return (
-    <li
-      role='menuitem'
-      data-state=''
-      aria-expanded={false}
-      className='font-semibold space-y-4'
+    <div
+      className={`flex items-center gap-2 hover:bg-zinc-500/10 py-2 pr-4 transition-colors ${parentId ? 'pl-6' : 'pl-8'}`}
+      onClick={handleSelectMenuItem}
     >
-      <p>{item}</p>
-      {hasParents
-        ? parents.map((parent) => {
-          const nestedParents = filterParentsItems(parent.id)
-          return (
-            <NestedItem key={parent.id}>
-              {parent.name}
-              {nestedParents.length > 0
-                ? nestedParents.map((item) => <NestedItem key={item.id}>{item.name}</NestedItem>)
-                : null}
-            </NestedItem>
-          )
-        })
-        : null}
-    </li>
+      <MenuIndicator show={showIndicator} selected={isActive} />
+      <p className='font-semibold'>{item}</p>
+    </div>
   )
 }
