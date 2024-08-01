@@ -3,10 +3,10 @@ import type { RootItemProps } from "@/types"
 import { NestedItem } from "../NestedItem"
 
 export function RootItem({ id, item }: RootItemProps): JSX.Element {
-  const { filterParents, data } = useGetData()
-  const parents = filterParents(id)
+  const { filterParentsItems, data } = useGetData()
+  const parents = filterParentsItems(id)
   const hasParents = parents.length > 0
-  console.log('😭', parents)
+
   return (
     <li
       role='menuitem'
@@ -16,11 +16,11 @@ export function RootItem({ id, item }: RootItemProps): JSX.Element {
     >
       <p>{item}</p>
       {hasParents
-        ? parents.map(({ id, name }) => {
-          const nestedParents = filterParents(id)
+        ? parents.map((parent) => {
+          const nestedParents = filterParentsItems(parent.id)
           return (
-            <NestedItem key={id}>
-              {name}
+            <NestedItem key={parent.id}>
+              {parent.name}
               {nestedParents.length > 0
                 ? nestedParents.map((item) => <NestedItem key={item.id}>{item.name}</NestedItem>)
                 : null}

@@ -8,24 +8,29 @@ export function useGetData() {
   useMemo(async () => {
     try {
       const response = await fetch(`${BASE_URL}/locations`)
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`)
-      }
 
       const res: DataType[] = await response.json()
       setData(res)
     } catch (error) {
       //output error message
+      throw new Error(
+        'An error occurred while fetching data. Please check the log.'
+      )
       console.error(error)
     }
   }, [])
 
-  const filterParents = useCallback(
+  const rootItems = useMemo(
+    () => data?.filter(({ parent }) => parent === null),
+    [data]
+  )
+
+  const filterParentsItems = useCallback(
     (id: string) => {
       const parents = data?.filter(({ parent }) => String(parent) === id)
       return parents
     },
     [data]
   )
-  return { data, filterParents }
+  return { data, filterParentsItems, rootItems }
 }
