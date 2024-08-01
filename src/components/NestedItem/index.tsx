@@ -9,7 +9,7 @@ export function NestedItem({
   return (
     <div
       onClick={onChange}
-      id='nested-item'
+      data-testid='nested-item'
       className={`cursor-pointer font-normal hover:bg-zinc-500/10 transition-colors ${
         hasChildren ? 'ps-2 py-1' : 'ps-[3.75rem] py-2'
       } ${isActive && 'bg-amber-500/10'}`}
